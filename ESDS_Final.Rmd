@@ -1,0 +1,61 @@
+---
+title: "Final"
+author: "Jacob Coggshall"
+date: "2023-06-13"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r}
+library(here)
+library(dplyr)
+library(janitor)
+library(ggplot2)
+library(tidyverse)
+library(naniar)
+library(skimr)
+library(GGally)
+library(flextable)
+```
+
+```{r}
+bank <- read_csv(here("data", "sev208_kratseedbank_20120213.csv")) |>
+  clean_names() |>
+  mutate(seed_count = seeds,
+         mound = mnd,
+         direction = dir,
+         location = loc) |>
+  select(-seeds, -mnd, -dir, -loc)
+```
+
+```{r}
+gg_miss_var(bank)
+```
+
+```{r}
+# Assuming your data is in the 'bank' data frame with variables 'mound' and 'seed_count'
+model <- aov(seed_count ~ mound, data = bank)
+```
+
+checking assumptions
+
+```{r}
+# Create a histogram with ggplot2
+ggplot(bank, aes(x = seed_count)) +
+  geom_histogram(binwidth = 1, fill = "steelblue", color = "black") +
+  labs(x = "Seed Count", y = "Frequency", title = "Seed Count Histogram")
+```
+
+
+```{r}
+summary(model)
+```
+
+```{r}
+# Assuming your data is in the 'bank' data frame with variables 'mound' and 'seed_count'
+kruskal.test(seed_count ~ mound, data = bank)
+```
+
