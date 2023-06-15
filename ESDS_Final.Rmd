@@ -10,16 +10,16 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
 ```{r}
-library(here)
-library(dplyr)
-library(janitor)
-library(ggplot2)
-library(tidyverse)
-library(naniar)
-library(skimr)
-library(GGally)
-library(flextable)
-library(car)
+library(here)  # (here package: RStudio Team, 2021)
+library(dplyr)  # (Wickham et al., 2021)
+library(janitor)  # (Firke, 2021)
+library(ggplot2)  # (Wickham, 2016)
+library(tidyverse)  # (Wickham et al., 2019)
+library(naniar)  # (Tierney et al., 2021)
+library(skimr)  # (Carter, 2020)
+library(GGally)  # (Schloerke et al., 2020)
+library(flextable)  # (Gohel, 2021)
+library(car)  # (Fox et al., 2020)
 ```
 
 ```{r}
@@ -34,7 +34,7 @@ bank <- read_csv(here("data", "sev208_kratseedbank_20120213.csv")) |>
 ```
 
 ```{r}
-gg_miss_var(bank)
+gg_miss_var(bank)  # (Tierney et al., 2021)
 ```
 
 Null Hypothesis (H0): There is no difference in the total seed number between kangaroo rat mound locations.
@@ -44,12 +44,12 @@ Alternative Hypothesis (HA): There is a difference in the total seed number betw
 
 ```{r}
 #Creating a model object
-model <- aov(seed_count ~ location, data = bank)
+model <- aov(seed_count ~ location, data = bank) # (R Core Team, 2021)
 ```
 
 ```{r}
 # Set the theme
-theme_set(theme_minimal())
+theme_set(theme_minimal()) # (Wickham, 2016)
 
 # Create the histogram
 ggplot(data = bank, aes(x = seed_count)) +
@@ -67,7 +67,7 @@ Histogram to check distribution
 
 ```{r}
 # Perform Levene's test
-levene_test <- car::leveneTest(seed_count ~ location, data = bank)
+levene_test <- car::leveneTest(seed_count ~ location, data = bank) # (Fox et al., 2020)
 
 # Print the test statistic and p-value
 print(levene_test)
@@ -78,12 +78,12 @@ Levene's test is a test for homogeneity of variances, which checks if the varian
 
 
 ```{r}
-summary(model)
+summary(model) # (R Core Team, 2021)
 ```
 
 ```{r}
 #Running Kruskal Wallis rank sum test
-kruskal.test(seed_count ~ location, data = bank)
+kruskal.test(seed_count ~ location, data = bank) # (R Core Team, 2021)
 ```
 ```{r}
 ggplot(data = bank, aes(x = location, y = seed_count)) +
@@ -105,6 +105,8 @@ Conclusion:
 The Kruskal-Wallis test was chosen as the best statistical test to evaluate the differences in total seed number between kangaroo rat mound locations. This choice was made due to the non-normal distribution of the data and the violation of assumptions required for parametric tests like ANOVA.
 
 After conducting the Kruskal-Wallis test, we obtained a test statistic of 22.852 with a corresponding p-value of 4.335e-05. Since the p-value is less than the significance level of 0.05, we reject the null hypothesis. Therefore, we have sufficient evidence to conclude that there is a significant difference in the distribution of seed count between kangaroo rat mound locations.
+
+
 
 ```{r}
 community <- read_csv(here("data", "shrubstudy_community_flower_counts.ms.data.csv")) |>
@@ -132,7 +134,7 @@ filtered_count <- count %>%
 ```
 
 ```{r}
-gg_miss_var(filtered_count)
+gg_miss_var(filtered_count) # (Tierney et al., 2021)
 ```
 
 Hypothesises
@@ -170,7 +172,7 @@ Checking Normality
 
 ```{r}
 # Levene's test for Total_nr_infl
-levene_test_total_nr_infl <- car::leveneTest(total_nr_infl ~ treatment, data = filtered_count)
+levene_test_total_nr_infl <- car::leveneTest(total_nr_infl ~ treatment, data = filtered_count)  # (Fox et al., 2020)
 print(levene_test_total_nr_infl)
 
 # Levene's test for Nr_seeds
@@ -208,7 +210,7 @@ ggplot(filtered_count, aes(x = total_nr_infl, y = nr_seeds, color = treatment)) 
   theme_minimal()
 
 ```
-
+Caption: Scatterplot showing the relationship between seed count (nr_seeds) and the total number of inflorescences (total_nr_infl). Each point represents a data point, color-coded by plot type (treatment). The data is further divided into facets based on plant species.
 ```{r}
 # Residual plot
 residuals <- residuals(lm_model)
@@ -218,13 +220,16 @@ plot(predicted, residuals, main = "Residual Plot", xlab = "Predicted Values", yl
 abline(h = 0, lty = 2, col = "red")
 
 ```
-
+Caption: Residual plot depicting the residuals of the multiple linear regression model. The x-axis represents the predicted values of seed count (nr_seeds), while the y-axis displays the corresponding residuals. The red dashed line indicates the ideal scenario of zero residuals.
 ```{r}
 
 # Partial regression plot for total number of inflorescences
-crPlots(lm_model, terms = "total_nr_infl", main = "Partial Regression Plot: Total Number of Inflorescences")
+crPlots(lm_model, terms = "total_nr_infl", main = "Partial Regression Plot: Total Number of Inflorescences",
+        xlab = "Total Number of Inflorescences", ylab = "Partial Effect on Seed Count")
+
 
 ```
+Caption: Partial regression plot illustrating the relationship between seed count (nr_seeds) and the total number of inflorescences (total_nr_infl) while controlling for other variables. The plot provides an estimation of the effect of the total number of inflorescences on seed count, accounting for the influence of other independent variables.
 
 ```{r}
 # Overall model fit plot
@@ -235,4 +240,16 @@ plot(predicted, observed, main = "Model Fit: Predicted vs. Observed", xlab = "Pr
 abline(0, 1, col = "red", lty = 2)
 
 ```
+Caption: Plot comparing the observed seed count (nr_seeds) to the predicted values from the multiple linear regression model. The diagonal red dashed line represents perfect alignment between the observed and predicted values, indicating a good fit of the model to the data.
 
+Conclusion
+
+Choice of Multiple Linear Regression Test: The multiple linear regression test was the best choice for analyzing the relationship between seed count and the predictor variables (plot type, plant species, and total number of inflorescences) in our dataset. This test allowed us to examine the simultaneous effects of multiple variables on seed count and assess their significance.
+
+Conclusion on the Relationship between Variables and Seed Count:
+
+Plot Type: There is a marginally significant difference in seed count between shrub and open plots, as indicated by the coefficient estimate and p-value associated with the "treatmentshrub" variable.
+Plant Species: There is no significant difference in seed count among different plant species, based on the coefficients and p-values associated with the plant species variables.
+Total Number of Inflorescences: There is a highly significant positive relationship between the total number of inflorescences and seed count, as supported by the coefficient estimate and the extremely low p-value.
+
+Overall, the multiple linear regression model revealed that the total number of inflorescences had a significant positive impact on seed count, while other variables did not show significant relationships. This finding suggests that the abundance of inflorescences plays a crucial role in determining the seed count.
