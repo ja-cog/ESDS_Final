@@ -19,6 +19,7 @@ library(naniar)
 library(skimr)
 library(GGally)
 library(flextable)
+library(car)
 ```
 
 ```{r}
@@ -79,33 +80,11 @@ Levene's test is a test for homogeneity of variances, which checks if the varian
 ```{r}
 summary(model)
 ```
-Summary Results:
-
-Null hypothesis (H0): There is no significant difference in the mean seed count between kangaroo rat mound locations.
-
-Alternative hypothesis (HA): There is a significant difference in the mean seed count between kangaroo rat mound locations.
-
-Test statistic: F value = 0.154
-
-p-value: 0.695
-Conclusion: The p-value is greater than the significance level (typically 0.05), so we fail to reject the null hypothesis. This means that there is no significant evidence to suggest a difference in the mean seed count between kangaroo rat mound locations based on the ANOVA test.
-
 
 ```{r}
 #Running Kruskal Wallis rank sum test
 kruskal.test(seed_count ~ location, data = bank)
 ```
-Null hypothesis (H0): There is no significant difference in the distribution of seed count between kangaroo rat mound locations.
-
-Alternative hypothesis (HA): There is a significant difference in the distribution of seed count between kangaroo rat mound locations.
-
-Test statistic: Kruskal-Wallis chi-squared = 7.4789
-p-value: 0.5874
-
-Conclusion: The p-value is greater than the significance level of 0.05, so we fail to reject the null hypothesis. This means that there is no significant evidence to suggest a difference in the distribution of seed count between kangaroo rat mound locations based on the Kruskal-Wallis test.
-
-
-
 ```{r}
 ggplot(data = bank, aes(x = location, y = seed_count)) +
   geom_jitter(trim = FALSE) +
@@ -121,8 +100,139 @@ ggplot(data = bank, aes(x = location, y = seed_count)) +
 
 "Distribution of Total Seed Number by Mound Location: The plot illustrates the variation in total seed numbers for different mound locations. Each point represents a data point, with the vertical position indicating the seed count value. Jittering is applied to prevent overlapping points. The x-axis represents the mound locations: B (base of kangaroo rat mound on the mound), D (surrounding area of kangaroo rat mound on the mound), E (edge of Bouteloua eripoda grass clumps off the mound), and I (interspace between black grama grass clumps off the mound). The y-axis represents the total seed number."
 
+Conclusion:
+
+The Kruskal-Wallis test was chosen as the best statistical test to evaluate the differences in total seed number between kangaroo rat mound locations. This choice was made due to the non-normal distribution of the data and the violation of assumptions required for parametric tests like ANOVA.
+
+After conducting the Kruskal-Wallis test, we obtained a test statistic of 22.852 with a corresponding p-value of 4.335e-05. Since the p-value is less than the significance level of 0.05, we reject the null hypothesis. Therefore, we have sufficient evidence to conclude that there is a significant difference in the distribution of seed count between kangaroo rat mound locations.
 
 ```{r}
+community <- read_csv(here("data", "shrubstudy_community_flower_counts.ms.data.csv")) |>
+  clean_names() 
+  
+  individual <- read_csv(here("data", "shrubstudy_individual_flower_counts.ms.data.csv")) |>
+  clean_names() 
+  
+    observers <- read_csv(here("data", "shrubstudy_pollinator.ms.data.csv")) |>
+  clean_names() 
+  
+  count <- read_csv(here("data", "shrubstudy_seed_ctwt.ms.data.csv")) |>
+  clean_names() 
+
+
+filtered_count <- count %>%
+  dplyr::select(treatment, species, total_nr_infl, nr_seeds)|> 
+ na.omit()%>%
+  filter(rowSums(. != 0, na.rm = TRUE) > 0) %>%
+  mutate(treatment = ifelse(treatment == "control", "open", treatment)) 
+  
+
+
+  
+```
+
+```{r}
+gg_miss_var(filtered_count)
+```
+
+Hypothesises
+
+Null Hypotheses:
+
+Plot Type: There is no significant difference in seed count between shrub and open plots.
+
+Plant Species: There is no significant difference in seed count among different plant species.
+
+Total Number of Inflorescences: There is no significant relationship between the total number of inflorescences and seed count.
+
+Alternative Hypotheses:
+
+Plot Type: There is a significant difference in seed count between shrub and open plots.
+
+Plant Species: There is a significant difference in seed count among different plant species.
+
+Total Number of Inflorescences: There is a significant relationship between the total number of Inflorescences and seed count.
+
+```{r}
+# Histogram for Total_nr_infl
+ggplot(data = count, aes(x = total_nr_infl)) +
+  geom_histogram(fill = "blue", color = "black", bins = 20) +
+  labs(x = "Total Number of Inflorescences", y = "Frequency") +
+  ggtitle("Histogram of Total Number of Inflorescences")
+
+# Histogram for Nr_seeds
+ggplot(data = count, aes(x = nr_seeds)) +
+  geom_histogram(fill = "red", color = "black", bins = 20) +
+  labs(x = "Seed Count", y = "Frequency") +
+  ggtitle("Histogram of Seed Count")
+```
+Checking Normality
+
+```{r}
+# Levene's test for Total_nr_infl
+levene_test_total_nr_infl <- car::leveneTest(total_nr_infl ~ treatment, data = filtered_count)
+print(levene_test_total_nr_infl)
+
+# Levene's test for Nr_seeds
+levene_test_nr_seeds <- car::leveneTest(nr_seeds ~ treatment, data = filtered_count)
+print(levene_test_nr_seeds)
+```
+Testing Homogeneity of Variance
+
+```{r}
+lm_model <- lm(nr_seeds ~ treatment + species + total_nr_infl, data = filtered_count)
+
+# Print the summary of the regression model
+summary(lm_model)
+```
+
+Interpretation of the coefficients:
+
+Intercept: The estimated intercept represents the expected seed count when all other variables are zero. In this case, it is -2.56735, but the p-value (0.36768) suggests that it is not statistically significant.
+
+treatmentshrub: This coefficient represents the difference in seed count between the shrub treatment and the open plot treatment. The estimated effect is -2.91198, but the p-value (0.09724) suggests that it is marginally significant.
+
+speciesCARRUP, speciesGEUROS, speciesKOBMYO, speciesMINOBT, and speciesTRIDAS: These coefficients represent the differences in seed count among different plant species compared to the reference species (which is not specified in the output). The estimated effects vary for each species, but none of them are statistically significant based on the given p-values (all p-values > 0.05, except for speciesGEUROS with p-value = 0.02891).
+
+total_nr_infl: This coefficient represents the expected change in seed count for each unit increase in the total number of inflorescences. The estimated effect is 2.15013, and the p-value is highly significant (< 2.2e-16), indicating a strong association between total number of inflorescences and seed count.
+
+Overall, the multiple linear regression model suggests that the total number of inflorescences is a significant predictor of seed count. The other variables, including plot type and plant species, do not show significant associations with seed count in this analysis.
+
+```{r}
+
+# Scatterplot of seed count and total number of inflorescences
+ggplot(filtered_count, aes(x = total_nr_infl, y = nr_seeds, color = treatment)) +
+  geom_point() +
+  facet_wrap(~species) +
+  labs(x = "Total Number of Inflorescences", y = "Seed Count") +
+  theme_minimal()
+
+```
+
+```{r}
+# Residual plot
+residuals <- residuals(lm_model)
+predicted <- fitted(lm_model)
+
+plot(predicted, residuals, main = "Residual Plot", xlab = "Predicted Values", ylab = "Residuals")
+abline(h = 0, lty = 2, col = "red")
+
+```
+
+```{r}
+
+# Partial regression plot for total number of inflorescences
+crPlots(lm_model, terms = "total_nr_infl", main = "Partial Regression Plot: Total Number of Inflorescences")
+
+```
+
+```{r}
+# Overall model fit plot
+predicted <- fitted(lm_model)
+observed <- filtered_count$nr_seeds
+
+plot(predicted, observed, main = "Model Fit: Predicted vs. Observed", xlab = "Predicted Values", ylab = "Observed Values")
+abline(0, 1, col = "red", lty = 2)
 
 ```
 

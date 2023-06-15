@@ -1,0 +1,64 @@
+"date","shrub_num","aspect","tag_num","treatment","time_visited","pollinator_ID","plant_visited","cloud_cover","wind","start_time","end_time","notes"
+2021-06-23,26,"north",NaN,"open",09:59:00,"fly","GEUROS",25,"<10",09:50:00,10:00:00,"in notebook"
+2021-06-24,NaN,"north",NaN,"shrub",09:03:00,"bombus","SALIX",95,"<10",08:55:00,09:05:00,"not in plot"
+2021-06-24,NaN,"north",NaN,"open",09:58:00,"bombus","CASOCC",100,"<10",09:54:00,10:04:00,"not in plot, but close"
+2021-06-30,47,"south",NaN,"shrub",10:09:00,"fly","SALIX",25,"<10",10:05:00,10:15:00,NaN
+2021-06-30,47,"south",NaN,"open",10:10:00,"ant","PHLPUL",25,"<10",10:05:00,10:15:00,NaN
+2021-06-30,30,"south",NaN,"open",10:30:00,"hover fly","AREFEN",40,"<10",10:22:00,10:32:00,NaN
+2021-06-30,49,"south",NaN,"shrub",10:47:00,"fly","SALIX",40,"<10",10:38:00,10:48:00,NaN
+2021-07-01,6,"north",NaN,"open",09:42:00,"ant","LLOSER",50,"<10",09:42:00,09:52:00,NaN
+2021-07-06,15,"north",NaN,"shrub",10:04:00,"bombus","SALIX",10,"<10",10:00:00,10:10:00,NaN
+2021-07-06,54,"south",NaN,"open",12:06:00,"fly","SALIX",50,"<10",11:57:00,12:07:00,NaN
+2021-07-06,44,"south",NaN,"open",12:13:00,"fly","GEUROS",50,"<10",12:12:00,12:22:00,NaN
+2021-07-06,44,"south",NaN,"open",12:14:00,"fly","GEUROS",50,"<10",12:12:00,12:22:00,NaN
+2021-07-06,44,"south",NaN,"open",12:17:00,"fly","GEUROS",50,"<10",12:12:00,12:22:00,NaN
+2021-07-06,44,"south",NaN,"shrub",12:19:00,"hover fly","SAXROH",50,"<10",12:12:00,12:22:00,NaN
+2021-07-06,33,"south",NaN,"shrub",12:33:00,"ant","TETACA",70,"<10",12:30:00,12:40:00,NaN
+2021-07-06,49,"south",NaN,"shrub",12:42:00,"fly","POTGLA",60,"<10",12:42:00,12:52:00,"NOT GEUROS"
+2021-07-06,49,"south",NaN,"shrub",12:43:00,"fly","POTGLA",60,"<10",12:42:00,12:52:00,NaN
+2021-07-06,49,"south",NaN,"shrub",12:43:00,"fly","ERISIM",60,"<10",12:42:00,12:52:00,NaN
+2021-07-06,49,"south",NaN,"shrub",12:44:00,"fly","POTGLA",60,"<10",12:42:00,12:52:00,NaN
+2021-07-06,49,"south",NaN,"shrub",12:45:00,"fly","ERISIM",60,"<10",12:42:00,12:52:00,NaN
+2021-07-06,49,"south",NaN,"shrub",12:45:00,"fly","SALIX",60,"<10",12:42:00,12:52:00,NaN
+2021-07-06,49,"south",NaN,"shrub",12:46:00,"fly","SALIX",60,"<10",12:42:00,12:52:00,NaN
+2021-07-06,49,"south",NaN,"shrub",12:46:00,"hover fly","SALIX",60,"<10",12:42:00,12:52:00,NaN
+2021-07-06,49,"south",NaN,"shrub",12:47:00,"fly","SALIX",60,"<10",12:42:00,12:52:00,NaN
+2021-07-06,49,"south",NaN,"open",12:51:00,"fly","GEUROS",60,"<10",12:42:00,12:52:00,NaN
+2021-07-08,6,"north",NaN,"open",10:28:00,"fly","DRASTR",5,"<10",10:24:00,10:34:00,NaN
+2021-07-08,27,"north",NaN,"shrub",10:44:00,"fly","SALIX",5,"10 to 20",10:38:00,10:48:00,NaN
+2021-07-08,27,"north",NaN,"shrub",10:45:00,"fly","ERISIM",5,"10 to 20",10:38:00,10:48:00,NaN
+2021-07-08,27,"north",NaN,"shrub",10:46:00,"ant","SALIX",5,"10 to 20",10:38:00,10:48:00,NaN
+2021-07-08,49,"south",NaN,"shrub",12:38:00,"fly","POTGLA",50,"<10",12:31:00,12:41:00,NaN
+2021-07-08,49,"south",NaN,"shrub",12:40:00,"fly","SALIX",50,"<10",12:31:00,12:41:00,NaN
+2021-07-08,47,"south",NaN,"open",13:08:00,"ant","MINOBT",70,"<10",13:07:00,13:17:00,NaN
+2021-07-13,33,"south",NaN,"open",12:58:00,"fly","TETACA",50,"10 to 20",12:53:00,13:03:00,NaN
+2021-07-13,49,"south",NaN,"shrub",13:00:00,"bee","TETACA",50,"10 to 20",13:23:00,13:33:00,NaN
+2021-07-13,49,"south",NaN,"shrub",13:28:00,"fly","POTGLA",75,"10 to 20",13:23:00,13:33:00,NaN
+2021-07-21,44,"south",NaN,"shrub",08:23:00,"hover fly","SOLMUL",95,"<10",08:23:00,08:33:00,NaN
+2021-07-21,44,"south",NaN,"shrub",08:32:00,"fly","AREFEN",95,"<10",08:23:00,08:33:00,NaN
+2021-07-21,6,"south",NaN,"open",09:15:00,"fly","AREFEN",100,"<10",09:14:00,09:24:00,NaN
+2021-07-21,27,"south",NaN,"open",09:38:00,"bombus","AREFEN",100,"<10",09:36:00,09:46:00,NaN
+2021-07-21,33,"south",NaN,"shrub",11:11:00,"fly","MINOBT",60,"<10",11:10:00,11:20:00,NaN
+2021-07-21,30,"south",NaN,"shrub",12:37:00,"hover fly","AREFEN",50,"<10",12:11:00,12:21:00,NaN
+2021-07-27,6,"north",NaN,"open",09:50:00,"fly","AREFEN",0,"<10",09:42:00,09:52:00,NaN
+2021-07-27,27,"north",NaN,"shrub",10:06:00,"hover fly","AREFEN",0,"<10",10:02:00,10:12:00,NaN
+2021-07-27,27,"north",NaN,"shrub",10:07:00,"hover fly","AREFEN",0,"<10",10:02:00,10:12:00,NaN
+2021-07-27,27,"north",NaN,"shrub",10:09:00,"hover fly","AREFEN",0,"<10",10:02:00,10:12:00,NaN
+2021-07-27,27,"north",NaN,"shrub",10:10:00,"hover fly","AREFEN",0,"<10",10:02:00,10:12:00,NaN
+2021-07-27,33,"south",NaN,"open",13:03:00,"fly","CAMROT",0,"<10",12:57:00,13:07:00,NaN
+2021-07-27,47,"south",NaN,"shrub",13:49:00,"fly","SOLMUL",0,"<10",13:47:00,13:57:00,NaN
+2021-07-27,47,"south",NaN,"shrub",13:50:00,"bee","SOLMUL",0,"<10",13:47:00,13:57:00,NaN
+2021-07-27,47,"south",NaN,"shrub",13:51:00,"bombus","SOLMUL",0,"<10",13:47:00,13:57:00,NaN
+2021-07-27,47,"south",NaN,"shrub",13:51:00,"bee","SOLMUL",0,"<10",13:47:00,13:57:00,NaN
+2021-07-27,47,"south",NaN,"shrub",13:57:00,"bee","SOLMUL",0,"<10",13:47:00,13:57:00,NaN
+2021-07-28,44,"south",NaN,"shrub",08:53:00,"hover fly","AREFEN",0,"<10",08:43:00,08:53:00,NaN
+2021-07-28,44,"south",NaN,"shrub",08:53:00,"hover fly","AREFEN",0,"<10",08:43:00,08:53:00,NaN
+2021-07-28,5,"north",NaN,"shrub",09:32:00,"bombus","AREFEN",0,"<10",09:28:00,09:38:00,NaN
+2021-07-28,49,"south",NaN,"shrub",12:53:00,"fly","AREFEN",50,"<10",12:48:00,12:58:00,NaN
+2021-07-28,49,"south",NaN,"open",12:54:00,"fly","AREFEN",50,"<10",12:48:00,12:58:00,NaN
+2021-07-28,49,"south",NaN,"shrub",13:14:00,"hover fly","ERIPIN",50,"<10",13:06:00,13:16:00,NaN
+2021-07-28,49,"south",NaN,"open",13:14:00,"fly","AREFEN",50,"<10",13:06:00,13:16:00,NaN
+2021-07-28,49,"south",NaN,"open",13:15:00,"fly","AREFEN",50,"<10",13:06:00,13:16:00,NaN
+2021-07-28,47,"south",NaN,"shrub",13:26:00,"bombus","SOLMUL",50,"<10",13:25:00,13:35:00,NaN
+2021-07-28,47,"south",NaN,"shrub",13:30:00,"hover fly","SOLMUL",50,"<10",13:25:00,13:35:00,NaN
+2021-07-28,47,"south",NaN,"shrub",13:32:00,"fly","SOLMUL",50,"<10",13:25:00,13:35:00,NaN
