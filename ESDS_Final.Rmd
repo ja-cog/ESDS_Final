@@ -1,5 +1,5 @@
 ---
-title: "Final"
+title: "Final Project ENV S 193 DS"
 author: "Jacob Coggshall"
 date: "2023-06-13"
 output: html_document
@@ -9,19 +9,73 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
+<h3>Table of Contents</h3>
+
+<ul>
+  <li>Loading in packages</li>
+  <li>
+    <h4>Problem 1</h4>
+    <ul>
+      <li>Introduction</li>
+      <li>Methods:</li>
+      <ul>
+        <li>Loading and cleaning data</li>
+        <li>Checking for missing values</li>
+        <li>Stating Null and Alternative Hypothesis</li>
+        <li>Creating Model Object</li>
+        <li>Histogram to check distribution</li>
+        <li>Checking Homogeneity of Variances</li>
+        <li>Results of Levene's Test</li>
+        <li>Making a Summary Model</li>
+        <li>Results from the Summary Mode</li>
+        <li>Creating Data Visualization</li>
+      </ul>
+      <li>Results</li>
+    </ul>
+  </li>
+  <li>
+    <h4>Problem 2</h4>
+    <ul>
+      <li>Introduction</li>
+      <li>Methods:</li>
+      <ul>
+        <li>Reading in data</li>
+        <li>Checking for missing variables</li>
+        <li>Stating Null and Alternative Hypothesis</li>
+        <li>Checking Normality</li>
+        <li>Testing Homogeneity of Variance</li>
+        <li>Running the multiple linear regression test</li>
+        <li>Interpretation of the coefficients</li>
+        <li>Creating Visualizations of the data</li>
+      </ul>
+      <li>Results</li>
+    </ul>
+  </li>
+</ul>
+
+- <h4>References</h4>
+
+###  Loading in packages
 ```{r}
-library(here)  # (here package: RStudio Team, 2021)
-library(dplyr)  # (Wickham et al., 2021)
-library(janitor)  # (Firke, 2021)
-library(ggplot2)  # (Wickham, 2016)
-library(tidyverse)  # (Wickham et al., 2019)
-library(naniar)  # (Tierney et al., 2021)
-library(skimr)  # (Carter, 2020)
-library(GGally)  # (Schloerke et al., 2020)
-library(flextable)  # (Gohel, 2021)
-library(car)  # (Fox et al., 2020)
+library(here)  #  (here package: RStudio Team, 2021)
+library(dplyr)  #  (Wickham et al., 2021)
+library(janitor)  #  (Firke, 2021)
+library(ggplot2)  #  (Wickham, 2016)
+library(tidyverse)  #  (Wickham et al., 2019)
+library(naniar)  #  (Tierney et al., 2021)
+library(car)  #  (Fox et al., 2020)
 ```
 
+#  PROBLEM 1
+
+
+# Introduction:
+
+In this analysis, we aim to explore the variations in total seed numbers among different kangaroo rat mound locations within the context of biology (Author et al., Year). The specific question we seek to answer is: "How does the total seed number differ between kangaroo rat mound locations?" This investigation is of particular interest in understanding the seed accumulation patterns associated with kangaroo rat mounds. We formulated the null hypothesis (H0) stating that there is no difference in the total seed number between kangaroo rat mound locations, while the alternative hypothesis (HA) posits that there is a difference in the total seed number across these locations. To conduct the analysis, we utilized several packages and functions, including dplyr for data manipulation (Wickham et al., 2021), janitor for data cleaning (Firke, 2021), ggplot2 for data visualization (Wickham, 2016), tidyverse for comprehensive data manipulation and visualization tools (Wickham et al., 2019), naniar for missing data visualization (Tierney et al., 2021), and car for statistical tests (Fox et al., 2020). The here package was also employed for file path management (RStudio Team, 2021). The code encompasses loading and cleaning the data, checking for missing values, formulating the null and alternative hypotheses, creating a model object, visualizing the distribution of seed counts, performing Levene's test for homogeneity of variances, creating a summary model, conducting the Kruskal-Wallis rank sum test, and creating a data visualization to illustrate the distribution of total seed numbers across different mound locations.
+
+# Methods
+
+###   Loading and cleaning data
 ```{r}
 bank <- read_csv(here("data", "sev208_kratseedbank_20120213.csv")) |>
   clean_names() |>
@@ -32,26 +86,28 @@ bank <- read_csv(here("data", "sev208_kratseedbank_20120213.csv")) |>
   select(-seeds, -mnd, -dir, -loc) |>
   filter(seed_count != 0)
 ```
-
+### Checking for missing values
 ```{r}
-gg_miss_var(bank)  # (Tierney et al., 2021)
+gg_miss_var(bank)  #  (Tierney et al., 2021)
 ```
-
+### Stating Null and Alternative Hypothesis
 Null Hypothesis (H0): There is no difference in the total seed number between kangaroo rat mound locations.
 
 Alternative Hypothesis (HA): There is a difference in the total seed number between kangaroo rat mound locations.
 
-
+### Creating Model Object
 ```{r}
-#Creating a model object
-model <- aov(seed_count ~ location, data = bank) # (R Core Team, 2021)
+# Creating a model object
+model <- aov(seed_count ~ location, data = bank) #  (R Core Team, 2021)
 ```
 
-```{r}
-# Set the theme
-theme_set(theme_minimal()) # (Wickham, 2016)
 
-# Create the histogram
+### Histogram to check distribution
+```{r}
+#  Set the theme
+theme_set(theme_minimal()) #  (Wickham, 2016)
+
+#  Create the histogram
 ggplot(data = bank, aes(x = seed_count)) +
   geom_histogram(bins = 6, fill = "steelblue", color = "black") +
   labs(x = "Seed Count", y = "Frequency", title = "Seed Count Histogram") +
@@ -63,28 +119,33 @@ ggplot(data = bank, aes(x = seed_count)) +
         panel.border = element_blank())
 ```
 
-Histogram to check distribution
 
+###  Checking Homogeneity of Variances
 ```{r}
-# Perform Levene's test
-levene_test <- car::leveneTest(seed_count ~ location, data = bank) # (Fox et al., 2020)
+#  Perform Levene's test
+levene_test <- car::leveneTest(seed_count ~ location, data = bank) #  (Fox et al., 2020)
 
-# Print the test statistic and p-value
+#  Print the test statistic and p-value
 print(levene_test)
 ```
 
-Levene's test is a test for homogeneity of variances, which checks if the variances of the seed_count variable are equal across the location groups. The test statistic (F-value) is 12.414, and the associated p-value is very small (less than 0.001). This suggests that there is strong evidence to reject the null hypothesis, indicating that the variances of seed_count are significantly different across the location groups.
+### Results of Levene's Test
+The test statistic (F-value) is 12.414, and the associated p-value is very small (less than 0.001). This suggests that there is strong evidence to reject the null hypothesis, indicating that the variances of seed_count are significantly different across the location groups.
 
+
+### Making a Summary Model
+```{r}
+summary(model) #  (R Core Team, 2021)
+```
+### Results from the Summary Model
 
 
 ```{r}
-summary(model) # (R Core Team, 2021)
+# Running Kruskal Wallis rank sum test
+kruskal.test(seed_count ~ location, data = bank) #  (R Core Team, 2021)
 ```
+###  Creating Data Visualization
 
-```{r}
-#Running Kruskal Wallis rank sum test
-kruskal.test(seed_count ~ location, data = bank) # (R Core Team, 2021)
-```
 ```{r}
 ggplot(data = bank, aes(x = location, y = seed_count)) +
   geom_jitter(trim = FALSE) +
@@ -98,16 +159,43 @@ ggplot(data = bank, aes(x = location, y = seed_count)) +
         panel.grid.major = element_line(color = "gray", linetype = "dashed"))
 ```
 
+
+
+Caption:
 "Distribution of Total Seed Number by Mound Location: The plot illustrates the variation in total seed numbers for different mound locations. Each point represents a data point, with the vertical position indicating the seed count value. Jittering is applied to prevent overlapping points. The x-axis represents the mound locations: B (base of kangaroo rat mound on the mound), D (surrounding area of kangaroo rat mound on the mound), E (edge of Bouteloua eripoda grass clumps off the mound), and I (interspace between black grama grass clumps off the mound). The y-axis represents the total seed number."
 
-Conclusion:
+# Results:
+
+
+
+The data were loaded and cleaned, and missing values were checked using the gg_miss_var() function from the naniar package. The null and alternative hypotheses were stated, with H0 suggesting no difference and HA suggesting a difference in the total seed number between kangaroo rat mound locations. A model object was created using the aov() function to conduct further analysis.
+
+To examine the distribution of seed counts, a histogram was created using the ggplot2 package. The plot visualized the frequency of seed counts, with the x-axis representing the seed count and the y-axis representing the frequency.
+
+The homogeneity of variances was assessed using Levene's test, performed with the leveneTest() function from the car package. The test results showed a significant difference in variances of seed_count across the location groups.
+
+A summary model was generated using the summary() function, providing information about the model and its coefficients. The Kruskal-Wallis rank sum test was conducted to evaluate the differences in total seed number between kangaroo rat mound locations, as it is suitable for non-normal data and violated assumptions of parametric tests like ANOVA. The test resulted in a test statistic of 22.852 and a p-value of 4.335e-05, indicating a significant difference in the distribution of seed counts across the locations.
 
 The Kruskal-Wallis test was chosen as the best statistical test to evaluate the differences in total seed number between kangaroo rat mound locations. This choice was made due to the non-normal distribution of the data and the violation of assumptions required for parametric tests like ANOVA.
 
 After conducting the Kruskal-Wallis test, we obtained a test statistic of 22.852 with a corresponding p-value of 4.335e-05. Since the p-value is less than the significance level of 0.05, we reject the null hypothesis. Therefore, we have sufficient evidence to conclude that there is a significant difference in the distribution of seed count between kangaroo rat mound locations.
 
+A data visualization was created using ggplot2 to illustrate the distribution of total seed numbers by mound location. The plot used jittering to prevent overlapping points and presented the mound locations (B, D, E, I) on the x-axis and the total seed numbers on the y-axis.
 
+In conclusion, the analysis revealed a significant difference in the distribution of seed counts among kangaroo rat mound locations. This finding suggests that the accumulation patterns of seeds vary across different locations within the kangaroo rat habitat.
 
+# PROBLEM 2
+
+# Introduction
+This code presents an analysis that explores the relationship between seed count and various factors, including plot type (shrub or open), plant species, and the total number of inflorescences within the context of biology. To accomplish this, several packages were utilized, including here (RStudio Team, 2021) for file path management, dplyr (Wickham et al., 2021) for data manipulation, janitor (Firke, 2021) for data cleaning, ggplot2 (Wickham, 2016) for visualizations, tidyverse (Wickham et al., 2019) for comprehensive data analysis, naniar (Tierney et al., 2021) for handling missing data, and car (Fox et al., 2020) for statistical analysis.
+
+The analysis in this code involves multiple linear regression to examine the relationship between seed count and the predictor variables (plot type, plant species, and total number of inflorescences). Multiple linear regression was chosen as the best method for this analysis as it allows for the examination of the simultaneous effects of multiple variables on seed count and the assessment of their significance. By utilizing multiple linear regression, we can quantify the contributions of each predictor variable to the variation in seed count and identify which factors are statistically significant.
+
+The primary research question addressed in this analysis is: How does seed count vary with plot type, plant species, and the total number of inflorescences? The null hypothesis (H0) for this study is that there is no significant relationship between seed count and plot type, plant species, or the total number of inflorescences. The alternative hypothesis (HA) posits that there is a significant relationship between seed count and at least one of the aforementioned factors: plot type, plant species, or the total number of inflorescences. By analyzing the data using multiple linear regression and the aforementioned packages, we aim to provide empirical evidence to support or reject these hypotheses.
+
+# Methods
+
+###  Reading in data
 ```{r}
 community <- read_csv(here("data", "shrubstudy_community_flower_counts.ms.data.csv")) |>
   clean_names() 
@@ -133,11 +221,13 @@ filtered_count <- count %>%
   
 ```
 
+###  Checking for missing variables
+
 ```{r}
-gg_miss_var(filtered_count) # (Tierney et al., 2021)
+gg_miss_var(filtered_count) #  (Tierney et al., 2021)
 ```
 
-Hypothesises
+### Stating Null and Alternative Hypothesis
 
 Null Hypotheses:
 
@@ -154,41 +244,41 @@ Plot Type: There is a significant difference in seed count between shrub and ope
 Plant Species: There is a significant difference in seed count among different plant species.
 
 Total Number of Inflorescences: There is a significant relationship between the total number of Inflorescences and seed count.
+###  Checking Normality
 
 ```{r}
-# Histogram for Total_nr_infl
+#  Histogram for Total_nr_infl
 ggplot(data = count, aes(x = total_nr_infl)) +
   geom_histogram(fill = "blue", color = "black", bins = 20) +
   labs(x = "Total Number of Inflorescences", y = "Frequency") +
   ggtitle("Histogram of Total Number of Inflorescences")
 
-# Histogram for Nr_seeds
+#  Histogram for Nr_seeds
 ggplot(data = count, aes(x = nr_seeds)) +
   geom_histogram(fill = "red", color = "black", bins = 20) +
   labs(x = "Seed Count", y = "Frequency") +
   ggtitle("Histogram of Seed Count")
 ```
-Checking Normality
-
+###  Testing Homogeneity of Variance
 ```{r}
-# Levene's test for Total_nr_infl
-levene_test_total_nr_infl <- car::leveneTest(total_nr_infl ~ treatment, data = filtered_count)  # (Fox et al., 2020)
+#  Levene's test for Total_nr_infl
+levene_test_total_nr_infl <- car::leveneTest(total_nr_infl ~ treatment, data = filtered_count)  #  (Fox et al., 2020)
 print(levene_test_total_nr_infl)
 
-# Levene's test for Nr_seeds
+#  Levene's test for Nr_seeds
 levene_test_nr_seeds <- car::leveneTest(nr_seeds ~ treatment, data = filtered_count)
 print(levene_test_nr_seeds)
 ```
-Testing Homogeneity of Variance
 
+###  Running the multiple linear regression test
 ```{r}
 lm_model <- lm(nr_seeds ~ treatment + species + total_nr_infl, data = filtered_count)
 
-# Print the summary of the regression model
+#  Print the summary of the regression model
 summary(lm_model)
 ```
 
-Interpretation of the coefficients:
+###  Interpretation of the coefficients:
 
 Intercept: The estimated intercept represents the expected seed count when all other variables are zero. In this case, it is -2.56735, but the p-value (0.36768) suggests that it is not statistically significant.
 
@@ -198,11 +288,11 @@ speciesCARRUP, speciesGEUROS, speciesKOBMYO, speciesMINOBT, and speciesTRIDAS: T
 
 total_nr_infl: This coefficient represents the expected change in seed count for each unit increase in the total number of inflorescences. The estimated effect is 2.15013, and the p-value is highly significant (< 2.2e-16), indicating a strong association between total number of inflorescences and seed count.
 
-Overall, the multiple linear regression model suggests that the total number of inflorescences is a significant predictor of seed count. The other variables, including plot type and plant species, do not show significant associations with seed count in this analysis.
-
+The multiple linear regression model suggests that the total number of inflorescences is a significant predictor of seed count. The other variables, including plot type and plant species, do not show significant associations with seed count in this analysis.
+### Creating Visulalizations of the data
 ```{r}
 
-# Scatterplot of seed count and total number of inflorescences
+#  Scatterplot of seed count and total number of inflorescences
 ggplot(filtered_count, aes(x = total_nr_infl, y = nr_seeds, color = treatment)) +
   geom_point() +
   facet_wrap(~species) +
@@ -210,9 +300,11 @@ ggplot(filtered_count, aes(x = total_nr_infl, y = nr_seeds, color = treatment)) 
   theme_minimal()
 
 ```
+
+
 Caption: Scatterplot showing the relationship between seed count (nr_seeds) and the total number of inflorescences (total_nr_infl). Each point represents a data point, color-coded by plot type (treatment). The data is further divided into facets based on plant species.
 ```{r}
-# Residual plot
+#  Residual plot
 residuals <- residuals(lm_model)
 predicted <- fitted(lm_model)
 
@@ -220,19 +312,23 @@ plot(predicted, residuals, main = "Residual Plot", xlab = "Predicted Values", yl
 abline(h = 0, lty = 2, col = "red")
 
 ```
+
+
 Caption: Residual plot depicting the residuals of the multiple linear regression model. The x-axis represents the predicted values of seed count (nr_seeds), while the y-axis displays the corresponding residuals. The red dashed line indicates the ideal scenario of zero residuals.
 ```{r}
 
-# Partial regression plot for total number of inflorescences
+#  Partial regression plot for total number of inflorescences
 crPlots(lm_model, terms = "total_nr_infl", main = "Partial Regression Plot: Total Number of Inflorescences",
         xlab = "Total Number of Inflorescences", ylab = "Partial Effect on Seed Count")
 
 
 ```
+
+
 Caption: Partial regression plot illustrating the relationship between seed count (nr_seeds) and the total number of inflorescences (total_nr_infl) while controlling for other variables. The plot provides an estimation of the effect of the total number of inflorescences on seed count, accounting for the influence of other independent variables.
 
 ```{r}
-# Overall model fit plot
+#  Overall model fit plot
 predicted <- fitted(lm_model)
 observed <- filtered_count$nr_seeds
 
@@ -240,9 +336,11 @@ plot(predicted, observed, main = "Model Fit: Predicted vs. Observed", xlab = "Pr
 abline(0, 1, col = "red", lty = 2)
 
 ```
+
+
 Caption: Plot comparing the observed seed count (nr_seeds) to the predicted values from the multiple linear regression model. The diagonal red dashed line represents perfect alignment between the observed and predicted values, indicating a good fit of the model to the data.
 
-Conclusion
+#  Results
 
 Choice of Multiple Linear Regression Test: The multiple linear regression test was the best choice for analyzing the relationship between seed count and the predictor variables (plot type, plant species, and total number of inflorescences) in our dataset. This test allowed us to examine the simultaneous effects of multiple variables on seed count and assess their significance.
 
@@ -253,3 +351,33 @@ Plant Species: There is no significant difference in seed count among different 
 Total Number of Inflorescences: There is a highly significant positive relationship between the total number of inflorescences and seed count, as supported by the coefficient estimate and the extremely low p-value.
 
 Overall, the multiple linear regression model revealed that the total number of inflorescences had a significant positive impact on seed count, while other variables did not show significant relationships. This finding suggests that the abundance of inflorescences plays a crucial role in determining the seed count.
+
+# References:
+
+Koontz, T. and H. Simpson. 2013. Effects of Kangaroo Rat Mounds on Seed Banks of Grass and Shrublands at the Sevilleta National Wildlife Refuge, New Mexico (2001) ver 102459. Environmental Data Initiative. [Online] Available at: https://doi.org/10.6073/pasta/115b8095a5e82028869a8c56eff14597 (Accessed 2023-06-14).
+
+Seaver, M. 2022. Individual and community flowering phenology, seed counts and pollinator visitation rates in shrub and open plots across Niwot Ridge, 2019 - 2021. ver 1. Environmental Data Initiative. [Online] Available at: https://doi.org/10.6073/pasta/edc4ab2faf7dd96cd1deac1544d5f2b9 (Accessed 2023-06-14).
+
+here: RStudio Team (2021). here: A Simpler Way to Find Your Files. R package version 1.0.1. Available at: https://CRAN.R-project.org/package=here. (Accessed: 2023-06-14).
+
+dplyr: Wickham, H., François, R., Henry, L., and Müller, K. (2021). dplyr: A Grammar of Data Manipulation. R package version 1.0.7. Available at: https://CRAN.R-project.org/package=dplyr. (Accessed: 2023-06-14).
+
+janitor: Firke, S. (2021). janitor: Simple Tools for Examining and Cleaning Dirty Data. R package version 2.1.0. Available at: https://CRAN.R-project.org/package=janitor. (Accessed: 2023-06-14).
+
+ggplot2: Wickham, H. (2016). ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York. Available at: https://ggplot2.tidyverse.org. (Accessed: 2023-06-14).
+
+tidyverse: Wickham, H., Averick, M., Bryan, J., Chang, W., McGowan, L., François, R., Grolemund, G., Hayes, A., Henry, L., Hester, J., Kuhn, M., Pedersen, T., Miller, E., Bache, S. M., Müller, K., Ooms, J., Robinson, D., Seidel, D. P., Spinu, V., … Yutani, H. (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686. https://doi.org/10.21105/joss.01686.
+
+naniar: Tierney, N., Cook, D., Hyndman, R., Jeong, S., Larmarange, J., Lewis, J., McCarter, L., and Vaquero, I. (2021). naniar: Tidy Data Missingness Visualization. R package version 1.2.0. Available at: https://CRAN.R-project.org/package=naniar. (Accessed: 2023-06-14).
+
+skimr: Carter, D. (2020). skimr: Compact and Flexible Summaries of Data. R package version 2.1.3. Available at: https://CRAN.R-project.org/package=skimr. (Accessed: 2023-06-14).
+
+GGally: Schloerke, B., Crowley, J., Cook, D., Briatte, F., Marbach, M., Thoen, E., Larmarange, J., Henry, L., and Vaquero, I. (2020). GGally: Extension to 'ggplot2'. R package version 2.1.1. Available at: https://CRAN.R-project.org/package=GGally. (Accessed: 2023-06-14).
+
+flextable: Gohel, D. (2021). flextable: Functions for Tabular Reporting. R package version 0.6.10. Available at: https://CRAN.R-project.org/package=flextable. (Accessed: 2023-06-14).
+
+car: Fox, J., Weisberg, S
+
+
+
+
