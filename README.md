@@ -27,9 +27,6 @@ janitor
 ggplot2
 tidyverse
 naniar
-skimr
-GGally
-flextable
 car
 Files Required
 shrubstudy_community_flower_counts.ms.data.csv (data file)
